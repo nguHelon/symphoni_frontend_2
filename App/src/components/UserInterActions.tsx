@@ -27,8 +27,8 @@ const UserInterActions = () => {
   }
 
   return (
-    <div className="w-full flex justify-between items-center">
-        <div className="w-[400px] flex items-center px-5 py-3 shadow-md rounded-lg bg-White dark:bg-DarkBlue">
+    <div className="w-full flex flex-col ss:flex-row justify-between items-center gap-4">
+        <div className="w-full ss:w-[400px] flex items-center px-5 py-3 shadow-md rounded-lg bg-White dark:bg-DarkBlue">
             <button 
                 className="w-[10%]"
                 onClick={() => {
@@ -48,7 +48,7 @@ const UserInterActions = () => {
                 }}
             />
         </div>
-        <div className="relative w-[250px] px-5 py-3 rounded-lg shadow-md bg-White dark:bg-DarkBlue">
+        <div className="relative w-full ss:w-[250px] px-5 py-3 rounded-lg shadow-md bg-White dark:bg-DarkBlue">
             <div 
                 className="w-full flex items-center justify-between text-VeryDarkBlueLT dark:text-White"
                 onClick={() => {
