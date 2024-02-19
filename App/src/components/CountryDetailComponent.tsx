@@ -52,7 +52,7 @@ const CountryDetailComponent = () => {
   useEffect(() => {
     if ( name == undefined ) return;
     fetchCountryDetail(name);    
-  }, [])
+  }, [name])
 
   useEffect(() => {
     if (JSON.stringify(country) === "{}") return;
@@ -111,7 +111,6 @@ const CountryDetailComponent = () => {
                                     className="outline-none py-2 px-5 capitalize text-DarkGray shadow-md rounded-md bg-White dark:text-White dark:bg-DarkBlue"
                                     onClick={() => {
                                         navigate(`../country-detail/${country.name.official}`)
-                                        window.location.reload();
                                     }}
                                 >                                    
                                     {country.name.common}
