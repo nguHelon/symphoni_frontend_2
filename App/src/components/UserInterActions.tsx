@@ -11,19 +11,15 @@ const UserInterActions = () => {
   const [showSelection, setShowSelection] = useState<boolean>(false);
   const [regionText, setRegionText] = useState<string>("Filter by Region");
   const [inputData, setInputData] = useState<string>("");
-  const { fetchCountriesByRegion, setLoading, fetchByCountryName } = useCountryStore();
+  const { fetchCountriesByRegion, fetchByCountryName } = useCountryStore();
 
   const handleClick = (region: string): void => {
-    setLoading(true);
     setShowSelection(false);
     fetchCountriesByRegion(region);
-    setLoading(false);
   }
 
   const fetchCountryByName = (name: string): void => {
-    setLoading(true);
     fetchByCountryName(name);
-    setLoading(false);
   }
 
   return (

@@ -23,7 +23,7 @@ interface countryDetailType {
     borders: string[]
 }
 
-interface countryType {
+export interface countryType {
     flags: {
         alt: string,
         png: string,
@@ -41,23 +41,18 @@ interface countryType {
 interface countryStore {
     country: countryDetailType,
     countries: countryType[],
-    loading: boolean,
-    setLoading: (loading: boolean) => void,
     fetchAllCountries: () => Promise<void>,
     fetchCountriesByRegion: (region: string) => Promise<void>,
     fetchByCountryName: (name: string) => Promise<void>,
     fetchCountryDetail: (name: string) => Promise<void>,
     getBorderCountries: (borders: string[]) => Promise<void>,
-    emptyCoutriesState: () => void
+    emptyCountriesState: () => void
 }
 
 const useCountryStore = create<countryStore>((set) => ({
     country: {} as countryDetailType,
     countries: [],
     loading: false,
-    setLoading: (loading: boolean) => {
-        set({ loading})
-    },
     fetchAllCountries: async () => {
         try {
             const response = await axios.get<countryType[]>("https://restcountries.com/v3.1/all");
@@ -122,9 +117,9 @@ const useCountryStore = create<countryStore>((set) => ({
             console.error(err);
         }
     },
-    emptyCoutriesState: () => {
+    emptyCountriesState: () => {
         set({
-            countries: []
+            countries: [] as countryType[]
         })
     }
 }))
