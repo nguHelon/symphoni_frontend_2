@@ -1,45 +1,41 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import UserInterActions from "../components/UserInterActions"
 import useCountryStore from "../store/store"
-import { Link } from "react-router-dom";
+import CountryPlaceholder from "../components/CountryPlaceholder";
+import Pagination from "../components/Pagination";
+
+const CountryComponent = lazy(() => import("../components/CountryComponent"));
 
 const AllCountriesPage = () => {
-  const { countries, fetchAllCountries, loading, setLoading } = useCountryStore();
+  const { countries, fetchAllCountries } = useCountryStore();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [countriesPerPage] = useState<number>(10);
 
   useEffect(() => {
-    setLoading(true);
     fetchAllCountries();
-    setLoading(false);
   }, []);
+
+  // Get current countries
+  const indexOfLastCountry: number = currentPage * countriesPerPage;
+  const indexOfFirstCountry: number = indexOfLastCountry - countriesPerPage;
+  const currentCountries = countries.slice(indexOfFirstCountry, indexOfLastCountry);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
 
   return (
     <div className="w-full px-5 ss:px-16 py-10 bg-VeryLightGray dark:bg-VeryDarkBlue">
        <UserInterActions />
        <div className="w-full flex flex-wrap items-center justify-center gap-8 mt-14">
-            {   loading ? (
-                    <div>Loading...</div>
-                ) :
-                    countries?.map((country, i) => (
-                        <Link
-                            key={i}
-                            to={`/country-detail/${country.name.official}`}
-                        >
-                            <div                                
-                                className="flex-none w-[300px] rounded-lg bg-White shadow-md dark:bg-DarkBlue"
-                            >
-                                <div className="h-[200px] w-full">
-                                    <img className="h-full w-full rounded-t-lg" src={country.flags.png} alt={country.flags.alt} />
-                                </div>
-                                <div className="p-5">
-                                    <h1 className="text-xl font-bold mb-5 text-VeryDarkBlueLT dark:text-White">{country.name.official}</h1>
-                                    <p className="font-semibold text-VeryDarkBlueLT dark:text-White">Population: <span className="text-DarkGray">{country.population}</span></p>
-                                    <p className="font-semibold text-VeryDarkBlueLT dark:text-White">Region: <span className="text-DarkGray">{country.region}</span></p>
-                                    <p className="font-semibold text-VeryDarkBlueLT dark:text-White">Capital: <span className="text-DarkGray">{country.capital}</span></p>
-                                </div>
-                            </div>
-                        </Link>                    
-                    ))
+            {   
+                currentCountries?.map((country, i) => (
+                    <Suspense key={i} fallback={<CountryPlaceholder />}> 
+                        <CountryComponent country={country} />             
+                    </Suspense>
+                ))
             }
+            <Pagination countryPerPage={countriesPerPage} totalCountries={countries.length} paginate={paginate} />
        </div>
     </div>
   )
